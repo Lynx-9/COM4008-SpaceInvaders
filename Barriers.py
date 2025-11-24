@@ -11,7 +11,5 @@ shape = [
     "  XXXXXXXX  ",       
     " XXXXXXXXXX ",
     "XXXXXXXXXXXX",
-    "XXXXXXXXXXXX",
-    "XXXXXXXXXXXX",
-    "XXX"    "XXX",
-    "XX"      "XX",]
+    "XXX      XXX",
+    "XX        XX",]
