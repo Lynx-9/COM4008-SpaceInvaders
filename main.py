@@ -8,6 +8,8 @@ class Game:
 
     def run(self):
         self.player.update()
+        
+        self.player.sprite.lasers.draw(screen)
         self.player.draw(screen)
         # update all sprites and draws all sprites
 
