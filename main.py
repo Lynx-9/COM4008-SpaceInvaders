@@ -1,6 +1,6 @@
 import pygame, sys
 from player import Player  
-
+import 
 class Game:
     def __init__(self):
         player_sprite = Player((SCREEN_WIDTH / 2,SCREEN_HEIGHT),SCREEN_WIDTH,2)
