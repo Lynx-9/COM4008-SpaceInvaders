@@ -1,0 +1,200 @@
+import pygame 
+import sys
+pygame.init()
+
+SCREEN_HEIGHT = 500
+SCREEN_WIDTH = 500
+
+screen = pygame.display.set_mode([SCREEN_HEIGHT,SCREEN_WIDTH])
+
+clock = pygame.time.Clock() # to slow down the speed of movement
+FPS = 15 # to slow down the speed of movement
+
+player_x = 250
+player_y = 450
+player_img = pygame.image.load("defender.png") #load in the image
+player_img = pygame.transform.scale(player_img, (35, 30)) # change the scale
+
+invader_startrow = 100
+invader_endrow = 250 #intervals of 50 each, + 50 adds a row, -50 takes away a row
+invader_startcol = 80
+invader_endcol = 410 #edited these columns a bit to have eleven invaders and be roughly in the middle
+#likely adding in separate start rows and columns to change where it starts at
+#boolean for direction
+move_right = True
+
+invader_img = pygame.image.load("invader1.png")
+invader_img = pygame.transform.scale(invader_img, (30, 30))#
+
+class Player:
+    def __init__(self, x, y, img, l, h):
+        self.x = x
+        self.y = y
+        self.img = img
+        self.l = l
+        self.h = h 
+        self.img = pygame.transform.scale(img, (l, h))
+        self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
+    def update(self):
+        self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
+
+player = Player((SCREEN_WIDTH/2)-(35/2), (SCREEN_HEIGHT - 100), pygame.image.load("defender.png"), 35, 30)
+
+class Invader:
+    def __init__(self, x, y, img, l, h, score = 0):
+        self.x = x
+        self.y = y
+        self.img = img
+        self.l = l
+        self.h = h
+        self.img = pygame.transform.scale(img, (l, h))
+        self.score = score
+        self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
+    def update(self):
+        self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
+
+class Bullet:
+    def __init__(self, x, y, w, h, s):
+        self.x = x
+        self.y = y
+        #self.img = img
+        self.width = w
+        self.height = h
+        #self.img = pygame.transform.scale(img, (w, h))
+        self.speed = s
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        #pygame.Rect()
+
+    def update(self):
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+
+invader = Invader(250, 100, pygame.image.load("invader1.png"), 30, 30)
+invaders = [] # ready for an array of invaders
+#invaders.append(invader) #this was adding an invader unnecessarily and making the rows of invader not move
+
+move_right = True
+fired = False
+collide = False
+
+bullet = Bullet(player.x, player.y, 10, 20, 10)
+bullets = []
+
+rows = 5
+cols = 11
+
+class Squid(Invader):
+    def __init__(self, x, y, img, l, h):
+        super().__init__(x, y, img, l, h, 30) #the 30 = the points given
+
+class Crab(Invader):
+    def __init__(self, x, y, img, l, h):
+        super().__init__(x, y, img, l, h, 20) #=20 points
+
+class Octopus(Invader):
+    def __init__(self, x, y, img, l, h):
+        super().__init__(x, y, img, l, h, 10)
+
+Squid(20, 20, pygame.image.load("invader1.png"), 30, 30)
+Crab(20, 20, pygame.image.load("invader2.png"), 30, 30)
+Octopus(20, 20, pygame.image.load("invader3.png"), 30, 30)
+
+squid_obj = Squid(20, 20, pygame.image.load("invader1.png"), 30, 30)
+print(type(squid_obj))
+print(squid_obj.__class__)
+print(squid_obj.__class__.__base__)
+
+def draw_invaders():
+    for row in range(invader_startrow, invader_endrow, 30): # intervals of 30 
+        for col in range(invader_startcol, invader_endcol, 30):
+            #screen.blit(invader_img, (col, row))
+            inv_obj = Invader(col, row, pygame.image.load("invader1.png"), 30, 30)
+            invaders.append(inv_obj)
+            #screen.blit(inv_obj.img, (col, row))
+
+def move_invaders():
+    global invader_startcol, invader_endcol, invader_startrow, invader_endrow, move_right
+    # start moving right 
+    if move_right == True:
+        invader_startcol += 2
+        invader_endcol += 2
+        edge_hit = False
+    else: # otherwise move left
+        invader_startcol -= 2
+        invader_endcol -= 2
+        edge_hit = False
+    
+    # detect edge of screen
+    if invader_endcol > SCREEN_WIDTH or invader_startcol < 0:
+        edge_hit = True
+        invader_startrow += 20
+        invader_endrow += 20
+    
+    # immediately reset edge_hit to prevent getting stuck! 
+    if edge_hit == True:
+        edge_hit == False
+        if move_right == True:
+            move_right = False
+        else:
+            move_right = True
+
+
+running = True
+while running: 
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+            pygame.display.quit()
+            pygame.quit()
+            sys.exit()
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                player.x -= 5
+            elif event.key == pygame.K_RIGHT:
+                player.x += 5
+            elif event.key == pygame.K_SPACE:
+                fired = True
+                collide = False
+                bullet.x = player.x + 15
+                bullet.y = player.y
+            elif event.key == pygame.K_ESCAPE or event.key == pygame.WINDOWCLOSE: # TO QUIT
+                running = False
+                #pygame.display.quit()
+                #pygame.QUIT()
+                #sys.exit()
+    
+    screen.fill([0,0,0]) # black background
+
+    move_invaders()
+    draw_invaders()
+    
+    screen.blit(player.img, (player.x, player_y))
+    
+    if invaders != None: 
+        for index in range(len(invaders)):
+            screen.blit(invaders[index].img, (invaders[index].x, invaders[index].y))
+    #invader.update()   #idk where this came from, seems unnecassary but am keeping just in case
+    
+    if fired == True:
+        pygame.draw.rect(screen, [0,255,0], bullet.rect)
+        bullet.y -= bullet.speed
+        bullet.update()
+        if bullet.y < 0:
+            fired = False # for reset
+            
+    for invader in invaders:
+        if bullet.rect.colliderect(invader.rect) and collide == False:
+            invaders.remove(invader)
+            collide = True
+            bullet.x = -10
+            bullet.y = -10
+    
+    pygame.display.flip()
+    
+    clock.tick(FPS)
+    
+#pygame.display.quit()
+#pygame.quit()
+sys.exit(0)
+
+#current issues, enemies still show partly on previous row when going down,enemies not dying to bullets (both are likely related) - possible caveman fix, just add a big black bar above the invaders, hiding the previous lines
+#main things to add after fixing previous issues would be the score and then player death
