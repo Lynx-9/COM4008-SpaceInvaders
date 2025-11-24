@@ -193,7 +193,7 @@ while running:
     clock.tick(FPS)
     
 #pygame.display.quit()
-#pygame.quit(
+#pygame.quit()
 sys.exit(0)
 
 #current issues, enemies still show partly on previous row when going down,enemies not dying to bullets (both are likely related) - possible caveman fix, just add a big black bar above the invaders, hiding the previous lines
