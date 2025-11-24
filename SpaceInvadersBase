@@ -141,9 +141,11 @@ def draw_invaders():
             #screen.blit(inv_obj.img, (col, row)) #having this instead of invaders.append causes the bullet to pass through them but no 'turnip heads'
     #print(len(invaders)) #array is constantly making new invaders, stop it *fixed now I believe
 
+invader_speed = 2 #global invader speed
+
 def move_invaders():
-    global move_right
-    moveright = 2 if move_right else -2 #if move_right is True then it goes +2 if its false then -2
+    global move_right, invader_speed
+    moveright = invader_speed if move_right else -invader_speed #if move_right is True then it adds invader speed
     edge_hit = False
     for invader in invaders: #invader movement for side to side
         invader.x += moveright
@@ -217,6 +219,7 @@ while running:
             collide = True
             bullet.x = -10
             bullet.y = -10
+            invader_speed += 0.1 #whenever an invader dies 0.1 is added to the speed
     pygame.display.flip()
     
     clock.tick(FPS)
