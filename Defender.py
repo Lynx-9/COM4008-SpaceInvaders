@@ -1,4 +1,4 @@
-import pygame
+import pygame, sys
 
 class Block(pygame.sprite.Sprite): #A block class for the barriers
     def __init__(self,size,color,x,y):
@@ -13,5 +13,7 @@ SHAPE = [
     "XXXXXXXXXXXX",
     "XXXXXXXXXXXX",
     "XXXXXXXXXXXX",
-    "XXX"   "XXX",
-    "XX"     "XX",]
+    "XXX"    "XXX",
+    "XX"      "XX",]
+
+
