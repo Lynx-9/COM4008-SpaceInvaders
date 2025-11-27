@@ -1,10 +1,12 @@
 import pygame 
 import sys
 import random
+from player import Player
+from laser import Laser
 pygame.init()
 
-SCREEN_HEIGHT = 500
-SCREEN_WIDTH = 500
+SCREEN_HEIGHT = 600 #changed these from 500 to 600 so as to align with jacks code
+SCREEN_WIDTH = 600
 
 screen = pygame.display.set_mode([SCREEN_HEIGHT,SCREEN_WIDTH])
 
@@ -32,7 +34,7 @@ move_right = True
 invader_img = pygame.image.load("invader1.png")
 invader_img = pygame.transform.scale(invader_img, (30, 30))#
 
-class Player:
+"""class Player:
     def __init__(self, x, y, img, l, h):
         self.x = x
         self.y = y
@@ -44,7 +46,7 @@ class Player:
     def update(self):
         self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
 
-player = Player((SCREEN_WIDTH/2)-(35/2), (SCREEN_HEIGHT - 100), pygame.image.load("defender.png"), 35, 30)
+player = Player((SCREEN_WIDTH/2)-(35/2), (SCREEN_HEIGHT - 100), pygame.image.load("defender.png"), 35, 30)""" #not needed with jacks code
 
 class Bomb: #bomb stuff
     def __init__(self, x, y, w, h, s):
@@ -79,7 +81,7 @@ class Invader:
     def update(self):
         self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
 
-class Bullet:
+"""class Bullet:
     def __init__(self, x, y, w, h, s):
         self.x = x
         self.y = y
@@ -92,18 +94,17 @@ class Bullet:
         #pygame.Rect()
 
     def update(self):
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)""" #unnecessary
 
-invader = Invader(250, 100, pygame.image.load("invader1.png"), 30, 30)
+"""invader = Invader(250, 100, pygame.image.load("invader1.png"), 30, 30)""" #didn't need this anymore, there's likely more cases of unnecessary code tbh
 invaders = [] # ready for an array of invaders
 #invaders.append(invader) #this was adding an invader unnecessarily and making the rows of invader not move
 
-move_right = True
 fired = False
 collide = False
 
-bullet = Bullet(player.x, player.y, 10, 20, 10)
-bullets = []
+"""bullet = Bullet(player.x, player.y, 10, 20, 10)
+bullets = []""" #jacks code made bullets so this is made unnecessary
 bombs = []
 
 class Squid(Invader):
@@ -158,7 +159,22 @@ def move_invaders():
             invader.update()
         edge_hit == False
         move_right = not move_right #makes it the opposite of what it is currently
-pygame.key.set_repeat(True) #this keeps the key being pressed when holding it down. lower the player.x greatly otherwise they simply fly off the screen
+
+class Game: #added from the main.py file, attempts are being made to make it obsolete as it would be easier than me recreating all of the code to fit in there
+    def __init__(self):
+        player_sprite = Player((SCREEN_WIDTH / 2,SCREEN_HEIGHT),SCREEN_WIDTH,2)
+        self.player = pygame.sprite.GroupSingle(player_sprite)
+
+    def run(self):
+        self.player.update()
+        
+        self.player.sprite.lasers.draw(screen)
+        self.player.draw(screen)
+
+game = Game()
+
+#pygame.key.set_repeat(True) #this keeps the key being pressed when holding it down. lower the player.x greatly otherwise they simply fly off the screen
+#^code no longer necessary because of jacks code
 
 draw_invaders() #put infront of while statement, it was constantly creating new invaders
 running = True
@@ -170,7 +186,7 @@ while running:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
+            """if event.key == pygame.K_LEFT: #removing these to not conflict with jacks code, changed quit key to an if statement
                 player.x -= 0.3
             elif event.key == pygame.K_RIGHT:
                 player.x += 0.3
@@ -178,31 +194,29 @@ while running:
                 fired = True
                 collide = False
                 bullet.x = player.x + 15
-                bullet.y = player.y
-            elif event.key == pygame.K_ESCAPE or event.key == pygame.WINDOWCLOSE: # TO QUIT
+                bullet.y = player.y"""
+            if event.key == pygame.K_ESCAPE or event.key == pygame.WINDOWCLOSE: # TO QUIT
                 running = False
-                #pygame.display.quit()
-                #pygame.QUIT()
-                #sys.exit()
     screen.fill([0,0,0]) # black background
 
     move_invaders()
     for invader in invaders:
         invader.invader_bomb()
     
-    screen.blit(player.img, (player.x, player_y))
+    game.run()
+    #screen.blit(player.img, (player.x, player_y)) #removed to avoid code conflicts
     
     if invaders != None: 
         for index in range(len(invaders)):
             screen.blit(invaders[index].img, (invaders[index].x, invaders[index].y))
     #invader.update()   #idk where this came from, seems unnecassary but am keeping just in case
     
-    if fired == True:
+    """if fired == True:
         pygame.draw.rect(screen, [0,255,0], bullet.rect)
         bullet.y -= bullet.speed
         bullet.update()
         if bullet.y < 0:
-            fired = False # for reset
+            fired = False # for reset""" #removed to avoid code conflicts
 
     for bomb in bombs[:]: #bombs being dropped on players grabs all bombs from bomb list
         bomb.y += bomb.speed
@@ -210,16 +224,16 @@ while running:
         pygame.draw.rect(screen, [0, 0, 255], bomb.rect) #change colour of bomb e.g 255,0,0 is red
         if bomb.y > SCREEN_HEIGHT: #remove off screen when stuff is hit
             bombs.remove(bomb)
-        if bomb.rect.colliderect(player.rect): #add whatever code is needed for getting hit later
-            bombs.remove(bomb)
+        if bomb.rect.colliderect(game.player.sprite.rect): #add whatever code is needed for getting hit later
+            bombs.remove(bomb) #add some code here for player lives, I have spent an embarassing amount of time on getting the code to work together
+            print("Player hit, womp womp")
     
-    for invader in invaders:
-        if bullet.rect.colliderect(invader.rect) and collide == False:
-            invaders.remove(invader)
-            collide = True
-            bullet.x = -10
-            bullet.y = -10
-            invader_speed += 0.1 #whenever an invader dies 0.1 is added to the speed
+    for laser in game.player.sprite.lasers: #fixed this finally, lasers code may need cooldown change but overall seems fine
+        for invader in invaders:
+            if laser.rect.colliderect(invader.rect) and collide == False:
+                invaders.remove(invader)
+                laser.kill()
+                invader_speed += 0.1 #whenever an invader dies 0.1 is added to the speed
     pygame.display.flip()
     
     clock.tick(FPS)
