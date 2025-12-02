@@ -6,7 +6,7 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.image = pygame.image.load('player.png').convert_alpha()
         self.rect = self.image.get_rect(midbottom = pos)
-        self.speed = speed
+        self.speed = 10 #changed from 'speed' so that the player would move quicker in Base code
         self.max_x_constraint = constraint
         self.ready = True
         self.laser_time = 0
