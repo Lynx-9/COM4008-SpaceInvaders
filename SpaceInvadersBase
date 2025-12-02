@@ -2,8 +2,12 @@ import pygame
 import sys
 import random
 from player import Player
-from laser import Laser
+from Barriers import Block, Barrier1, Barrier2, Barrier3 #Georginas code
 pygame.init()
+
+barrier1 = Barrier1(450,500) #code to make Georginas barrier code show up
+barrier2 = Barrier2(250,500)
+barrier3 = Barrier3(50,500)
 
 SCREEN_HEIGHT = 600 #changed these from 500 to 600 so as to align with jacks code
 SCREEN_WIDTH = 600
@@ -26,27 +30,9 @@ invader3_startrow = 210
 invader3_endrow = 250 #brute force but it works
 invader_startcol = 80
 invader_endcol = 410 #edited these columns a bit to have eleven invaders and be roughly in the middle
-#likely adding in separate start rows and columns to change where it starts at
 
 #boolean for direction
 move_right = True
-
-invader_img = pygame.image.load("invader1.png")
-invader_img = pygame.transform.scale(invader_img, (30, 30))#
-
-"""class Player:
-    def __init__(self, x, y, img, l, h):
-        self.x = x
-        self.y = y
-        self.img = img
-        self.l = l
-        self.h = h 
-        self.img = pygame.transform.scale(img, (l, h))
-        self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
-    def update(self):
-        self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
-
-player = Player((SCREEN_WIDTH/2)-(35/2), (SCREEN_HEIGHT - 100), pygame.image.load("defender.png"), 35, 30)""" #not needed with jacks code
 
 class Bomb: #bomb stuff
     def __init__(self, x, y, w, h, s):
@@ -75,58 +61,31 @@ class Invader:
         self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
     def invader_bomb(self):
         bomb = random.randint(0,100000) #randomly generate a number constantly, if it is high enough then bombs away
-        if bomb > 99950: #may need a higher number still quite a few bombs being shot
+        if bomb > 99950: #may need a higher number still quite a few bombs being shot - change this to 99050 to get more constant bombing for barrier testing
             bomb = Bomb(self.x + self.l//2, self.y + self.h, 10, 20, 5)
             bombs.append(bomb)
     def update(self):
         self.rect = pygame.Rect(self.x, self.y, self.l, self.h)
 
-"""class Bullet:
-    def __init__(self, x, y, w, h, s):
-        self.x = x
-        self.y = y
-        #self.img = img
-        self.width = w
-        self.height = h
-        #self.img = pygame.transform.scale(img, (w, h))
-        self.speed = s
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
-        #pygame.Rect()
-
-    def update(self):
-        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)""" #unnecessary
-
-"""invader = Invader(250, 100, pygame.image.load("invader1.png"), 30, 30)""" #didn't need this anymore, there's likely more cases of unnecessary code tbh
 invaders = [] # ready for an array of invaders
 #invaders.append(invader) #this was adding an invader unnecessarily and making the rows of invader not move
 
 fired = False
 collide = False
 
-"""bullet = Bullet(player.x, player.y, 10, 20, 10)
-bullets = []""" #jacks code made bullets so this is made unnecessary
 bombs = []
 
 class Squid(Invader):
     def __init__(self, x, y, img, l, h):
-        super().__init__(x, y, img, l, h, 30) #the 30 = the points given
+        super().__init__(x, y, img, l, h, 30)
 
 class Crab(Invader):
     def __init__(self, x, y, img, l, h):
-        super().__init__(x, y, img, l, h, 20) #=20 points
+        super().__init__(x, y, img, l, h, 20)
 
 class Octopus(Invader):
     def __init__(self, x, y, img, l, h):
         super().__init__(x, y, img, l, h, 10)
-
-"""Squid(20, 20, pygame.image.load("invader1.png"), 30, 30)
-Crab(20, 20, pygame.image.load("invader2.png"), 30, 30)
-Octopus(20, 20, pygame.image.load("invader3.png"), 30, 30)
-
-squid_obj = Squid(20, 20, pygame.image.load("invader1.png"), 30, 30)
-print(type(squid_obj))
-print(squid_obj.__class__)
-print(squid_obj.__class__.__base__)"""
 
 def draw_invaders(): 
     for col in range(invader_startcol, invader_endcol, 30): # intervals of 30 
@@ -139,8 +98,6 @@ def draw_invaders():
         for row in range(invader3_startrow, invader3_endrow, 30): 
             inv_obj3 = Octopus(col, row, pygame.image.load("invader3.png"), 30, 30)
             invaders.append(inv_obj3) 
-            #screen.blit(inv_obj.img, (col, row)) #having this instead of invaders.append causes the bullet to pass through them but no 'turnip heads'
-    #print(len(invaders)) #array is constantly making new invaders, stop it *fixed now I believe
 
 invader_speed = 2 #global invader speed
 
@@ -173,9 +130,6 @@ class Game: #added from the main.py file, attempts are being made to make it obs
 
 game = Game()
 
-#pygame.key.set_repeat(True) #this keeps the key being pressed when holding it down. lower the player.x greatly otherwise they simply fly off the screen
-#^code no longer necessary because of jacks code
-
 draw_invaders() #put infront of while statement, it was constantly creating new invaders
 running = True
 while running: 
@@ -186,37 +140,23 @@ while running:
             pygame.quit()
             sys.exit()
         elif event.type == pygame.KEYDOWN:
-            """if event.key == pygame.K_LEFT: #removing these to not conflict with jacks code, changed quit key to an if statement
-                player.x -= 0.3
-            elif event.key == pygame.K_RIGHT:
-                player.x += 0.3
-            elif event.key == pygame.K_SPACE:
-                fired = True
-                collide = False
-                bullet.x = player.x + 15
-                bullet.y = player.y"""
             if event.key == pygame.K_ESCAPE or event.key == pygame.WINDOWCLOSE: # TO QUIT
                 running = False
     screen.fill([0,0,0]) # black background
+
+    barrier1.blocks_group.draw(screen) #georginas code
+    barrier2.blocks2_group.draw(screen)
+    barrier3.blocks3_group.draw(screen)
 
     move_invaders()
     for invader in invaders:
         invader.invader_bomb()
     
     game.run()
-    #screen.blit(player.img, (player.x, player_y)) #removed to avoid code conflicts
     
     if invaders != None: 
         for index in range(len(invaders)):
             screen.blit(invaders[index].img, (invaders[index].x, invaders[index].y))
-    #invader.update()   #idk where this came from, seems unnecassary but am keeping just in case
-    
-    """if fired == True:
-        pygame.draw.rect(screen, [0,255,0], bullet.rect)
-        bullet.y -= bullet.speed
-        bullet.update()
-        if bullet.y < 0:
-            fired = False # for reset""" #removed to avoid code conflicts
 
     for bomb in bombs[:]: #bombs being dropped on players grabs all bombs from bomb list
         bomb.y += bomb.speed
@@ -227,6 +167,25 @@ while running:
         if bomb.rect.colliderect(game.player.sprite.rect): #add whatever code is needed for getting hit later
             bombs.remove(bomb) #add some code here for player lives, I have spent an embarassing amount of time on getting the code to work together
             print("Player hit, womp womp")
+            
+        for block in barrier1.blocks_group:
+            if bomb.rect.colliderect(block.rect):
+                #print("barrier hit")
+                bombs.remove(bomb)
+                barrier1.blocks_group.remove(block)
+                break
+        for block in barrier2.blocks2_group:
+            if bomb.rect.colliderect(block.rect):
+                #print("barrier hit")
+                bombs.remove(bomb)
+                barrier2.blocks2_group.remove(block)
+                break
+        for block in barrier3.blocks3_group:
+            if bomb.rect.colliderect(block.rect):
+                #print("barrier hit")
+                bombs.remove(bomb)
+                barrier3.blocks3_group.remove(block)
+                break
     
     for laser in game.player.sprite.lasers: #fixed this finally, lasers code may need cooldown change but overall seems fine
         for invader in invaders:
@@ -234,6 +193,24 @@ while running:
                 invaders.remove(invader)
                 laser.kill()
                 invader_speed += 0.1 #whenever an invader dies 0.1 is added to the speed
+        for block in barrier1.blocks_group:
+            if laser.rect.colliderect(block.rect):
+                #print("barrier hit")
+                laser.kill()
+                barrier1.blocks_group.remove(block)
+                break
+        for block in barrier2.blocks2_group:
+            if laser.rect.colliderect(block.rect):
+                #print("barrier hit")
+                laser.kill()
+                barrier2.blocks2_group.remove(block)
+                break
+        for block in barrier3.blocks3_group:
+            if laser.rect.colliderect(block.rect):
+                #print("barrier hit")
+                laser.kill()
+                barrier3.blocks3_group.remove(block)
+                break
     pygame.display.flip()
     
     clock.tick(FPS)
