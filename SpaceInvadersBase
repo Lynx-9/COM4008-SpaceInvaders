@@ -2,12 +2,13 @@ import pygame
 import sys
 import random
 from player import Player
-from Barriers import Block, Barrier1, Barrier2, Barrier3 #Georginas code
+from barriers import Block, Barrier1, Barrier2, Barrier3, Barrier4 #Georginas code
 pygame.init()
 
-barrier1 = Barrier1(450,500) #code to make Georginas barrier code show up
-barrier2 = Barrier2(250,500)
-barrier3 = Barrier3(50,500)
+barrier1 = Barrier1(500,500) #code to make Georginas barrier code show up
+barrier2 = Barrier2(350,500)
+barrier3 = Barrier3(200,500)
+barrier4 = Barrier4(50,500)
 
 SCREEN_HEIGHT = 600 #changed these from 500 to 600 so as to align with jacks code
 SCREEN_WIDTH = 600
@@ -147,6 +148,7 @@ while running:
     barrier1.blocks_group.draw(screen) #georginas code
     barrier2.blocks2_group.draw(screen)
     barrier3.blocks3_group.draw(screen)
+    barrier4.blocks4_group.draw(screen)
 
     move_invaders()
     for invader in invaders:
@@ -186,6 +188,12 @@ while running:
                 bombs.remove(bomb)
                 barrier3.blocks3_group.remove(block)
                 break
+        for block in barrier4.blocks4_group:
+            if bomb.rect.colliderect(block.rect):
+                #print("barrier hit")
+                bombs.remove(bomb)
+                barrier4.blocks4_group.remove(block)
+                break
     
     for laser in game.player.sprite.lasers: #fixed this finally, lasers code may need cooldown change but overall seems fine
         for invader in invaders:
@@ -210,6 +218,12 @@ while running:
                 #print("barrier hit")
                 laser.kill()
                 barrier3.blocks3_group.remove(block)
+                break
+        for block in barrier4.blocks4_group:
+            if laser.rect.colliderect(block.rect):
+                #print("barrier hit")
+                laser.kill()
+                barrier4.blocks4_group.remove(block)
                 break
     pygame.display.flip()
     

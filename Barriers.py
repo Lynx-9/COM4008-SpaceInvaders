@@ -49,3 +49,14 @@ class Barrier3: #A barrier class to create barriers from blocks
                     y_pos = y + row * 3
                     block3 = Block(x_pos,y_pos) 
                     self.blocks3_group.add(block3) #Add block to the group
+
+class Barrier4: #A barrier class to create barriers from blocks
+    def __init__(self, x, y): #A barrier class to create barriers from blocks
+        self.blocks4_group = pygame.sprite.Group() #Group to hold all the blocks
+        for row in range(len(shape)):
+            for col in range(len(shape[0])):
+                if shape[row][col] == "X": #If the character is an X, create a block
+                    x_pos = x + col * 3 #calculate x and y position on screen
+                    y_pos = y + row * 3
+                    block4 = Block(x_pos,y_pos) 
+                    self.blocks4_group.add(block4) #Add block to the group
