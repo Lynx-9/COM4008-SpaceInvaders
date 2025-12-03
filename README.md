@@ -8,9 +8,9 @@ invaders are reduced in number (from being shot).
 
 Jack has covered the requirements for the Player, allowing the player to move smoothly and shoot while moving 
 • Requirement: The defender (player) should be able to shoot multiple bullets continuously.
-Implement collision detection so that invaders are destroyed when successfully shot by the player,
-and that the player loses a life and respawns (until run out of lives) when shot by an invader.
+Implement collision detection so that invaders are destroyed when successfully shot by the player.
 
 Georgina has covered the requirements for obstacles/shields
 • Requirement: The four green barriers should diminish every time they are shot by both the invaders
 and the defender/player.
+The player loses a life and respawns (until run out of lives) when shot by an invader.
