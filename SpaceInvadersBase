@@ -2,13 +2,17 @@ import pygame
 import sys
 import random
 from player import Player
-from barriers import Block, Barrier1, Barrier2, Barrier3, Barrier4 #Georginas code
+from barriers import Barrier1, Barrier2, Barrier3, Barrier4 #Georginas code
+from lives import Lives
+
 pygame.init()
 
 barrier1 = Barrier1(500,500) #code to make Georginas barrier code show up
 barrier2 = Barrier2(350,500)
 barrier3 = Barrier3(200,500)
 barrier4 = Barrier4(50,500)
+
+ 
 
 SCREEN_HEIGHT = 600 #changed these from 500 to 600 so as to align with jacks code
 SCREEN_WIDTH = 600
