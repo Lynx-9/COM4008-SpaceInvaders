@@ -181,33 +181,13 @@ while running:
             player_lives = player_lives - 1
             print("Player hit, lives left:", player_lives)
 
-             # reset player position and clear player lasers (assumes lasers is a Group)
-#        try:
-#            game.player.sprite.rect.centerx = SCREEN_WIDTH // 2
-#            game.player.sprite.rect.bottom = SCREEN_HEIGHT - 10
-#        except AttributeError:
-#            # fallback if Player uses different attributes
-#            game.player.sprite.x = SCREEN_WIDTH // 2
-#            game.player.sprite.y = SCREEN_HEIGHT - 50
-
-        # clear lasers so player doesn't immediately die again
-        try:
-            game.player.sprite.lasers.empty()
-        except Exception:
-            pass
-
-        # optional short pause so player sees the hit
-        #pygame.display.flip()
-        #pygame.time.delay(500)
-
         if player_lives <= 0:
             print("Game Over")
             # simple game over: stop loop
             running = False
             break
 
-
-            
+        
         for block in barrier1.blocks_group:
             if bomb.rect.colliderect(block.rect):
                 #print("barrier hit")
