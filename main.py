@@ -14,8 +14,8 @@ class Game:
 
     def draw_lives(self):
         for life in range(self.lives - 1):
-            x = self.life_x_start_pos + (life * (self.lives_image.get_size()[0] + 10))
-            screen.blit(self.lives_image, (x,8))
+            x = self.life_x_start_pos + (life * (self.image.get_size()[0] + 10))
+            screen.blit(self.image, (x,8))
 
     def run(self):
         self.player.update()
