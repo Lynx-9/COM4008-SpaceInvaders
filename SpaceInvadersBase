@@ -2,7 +2,7 @@ import pygame
 import sys
 import random
 from player import Player
-from barriers import Barrier1, Barrier2, Barrier3, Barrier4 #Georginas code
+from Barriers import Barrier1, Barrier2, Barrier3, Barrier4 #Georginas code
 
 
 pygame.init()
@@ -188,31 +188,29 @@ while running:
             running = False
             break
 
-
-        for block in barrier1.blocks_group:
+        bombhit = False
+        for block in list(barrier1.blocks_group):
             if bomb.rect.colliderect(block.rect):
-                #print("barrier hit")
-                bombs.remove(bomb)
                 barrier1.blocks_group.remove(block)
-                break
-        for block in barrier2.blocks2_group:
+                bombhit = True
+                
+        for block in list(barrier2.blocks2_group):
             if bomb.rect.colliderect(block.rect):
-                #print("barrier hit")
-                bombs.remove(bomb)
                 barrier2.blocks2_group.remove(block)
-                break
-        for block in barrier3.blocks3_group:
+                bombhit = True
+                
+        for block in list(barrier3.blocks3_group):
             if bomb.rect.colliderect(block.rect):
-                #print("barrier hit")
-                bombs.remove(bomb)
                 barrier3.blocks3_group.remove(block)
-                break
-        for block in barrier4.blocks4_group:
+                bombhit = True
+                
+        for block in list(barrier4.blocks4_group):
             if bomb.rect.colliderect(block.rect):
-                #print("barrier hit")
-                bombs.remove(bomb)
                 barrier4.blocks4_group.remove(block)
-                break
+                bombhit = True
+                
+        if bombhit == True:
+            bombs.remove(bomb)
     
     for laser in game.player.sprite.lasers: #fixed this finally, lasers code may need cooldown change but overall seems fine
         for invader in invaders:
@@ -225,25 +223,21 @@ while running:
                 #print("barrier hit")
                 laser.kill()
                 barrier1.blocks_group.remove(block)
-                break
         for block in barrier2.blocks2_group:
             if laser.rect.colliderect(block.rect):
                 #print("barrier hit")
                 laser.kill()
                 barrier2.blocks2_group.remove(block)
-                break
         for block in barrier3.blocks3_group:
             if laser.rect.colliderect(block.rect):
                 #print("barrier hit")
                 laser.kill()
                 barrier3.blocks3_group.remove(block)
-                break
         for block in barrier4.blocks4_group:
             if laser.rect.colliderect(block.rect):
                 #print("barrier hit")
                 laser.kill()
                 barrier4.blocks4_group.remove(block)
-                break
     pygame.display.flip()
     
     clock.tick(FPS)
