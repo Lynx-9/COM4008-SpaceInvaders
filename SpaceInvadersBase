@@ -183,11 +183,12 @@ while running:
 
         if player_lives <= 0:
             print("Game Over")
+            font = pygame.font.Font(None, 36)
             # simple game over: stop loop
             running = False
             break
 
-        
+
         for block in barrier1.blocks_group:
             if bomb.rect.colliderect(block.rect):
                 #print("barrier hit")

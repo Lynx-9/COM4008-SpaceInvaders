@@ -3,18 +3,16 @@ import pygame
 class Block(pygame.sprite.Sprite): #A block class for the barriers
     def __init__(self,x,y):
         super().__init__() #Initialize the sprite
-        self.image = pygame.Surface((10,10)) #Create a 3x3 pixel block
+        self.image = pygame.Surface((10,10)) #Create a surface for the block
         self.image.fill((0,225,0))
         self.rect = self.image.get_rect(topleft = (x,y)) #Set position of blocks
 # Shape in the format of a list of strings
 shape = [
-    "   XXXXXXXXXXXXXXX   ",       
-    "  XXXXXXXXXXXXXXXXX  ",
-    " XXXXXXXXXXXXXXXXXXX ",
-    "XXXXXXXXXXXXXXXXXXXXX",
-    "XXXXXXXXXXXXXXXXXXXXX",
-    " XXXXXX       XXXXXX ",
-    " XXX             XXX ",]
+    "   XXXXXXXXXXXX  ",       
+    "  XXXXXXXXXXXXXX ",
+    " XXXXXXXXXXXXXXXX",
+    " XXXX        XXXX",
+    " XXX          XXX",]
 shape = [list(row) for row in shape] #Convert each string to a list of characters
 
 class Barrier1: #A barrier class to create barriers from blocks
