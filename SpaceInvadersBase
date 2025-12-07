@@ -11,6 +11,8 @@ barrier1 = Barrier1(500,500) #code to make Georginas barrier code show up
 barrier2 = Barrier2(350,500)
 barrier3 = Barrier3(200,500)
 barrier4 = Barrier4(50,500)
+player_lives = 3 #starting lives
+font = pygame.font.Font(None, 36) #font for displaying lives
 
  
 
@@ -149,6 +151,10 @@ while running:
                 running = False
     screen.fill([0,0,0]) # black background
 
+    lives_surf = font.render(f"Lives: {player_lives}", True, (255, 255, 255))
+    screen.blit(lives_surf, (10, 10))
+
+
     barrier1.blocks_group.draw(screen) #georginas code
     barrier2.blocks2_group.draw(screen)
     barrier3.blocks3_group.draw(screen)
@@ -172,7 +178,35 @@ while running:
             bombs.remove(bomb)
         if bomb.rect.colliderect(game.player.sprite.rect): #add whatever code is needed for getting hit later
             bombs.remove(bomb) #add some code here for player lives, I have spent an embarassing amount of time on getting the code to work together
-            print("Player hit, womp womp")
+            player_lives = player_lives - 1
+            print("Player hit, lives left:", player_lives)
+
+             # reset player position and clear player lasers (assumes lasers is a Group)
+        try:
+            game.player.sprite.rect.centerx = SCREEN_WIDTH // 2
+            game.player.sprite.rect.bottom = SCREEN_HEIGHT - 10
+        except AttributeError:
+            # fallback if Player uses different attributes
+            game.player.sprite.x = SCREEN_WIDTH // 2
+            game.player.sprite.y = SCREEN_HEIGHT - 50
+
+        # clear lasers so player doesn't immediately die again
+        try:
+            game.player.sprite.lasers.empty()
+        except Exception:
+            pass
+
+        # optional short pause so player sees the hit
+        #pygame.display.flip()
+        #pygame.time.delay(500)
+
+        if player_lives <= 0:
+            print("Game Over")
+            # simple game over: stop loop
+            running = False
+            break
+
+
             
         for block in barrier1.blocks_group:
             if bomb.rect.colliderect(block.rect):
