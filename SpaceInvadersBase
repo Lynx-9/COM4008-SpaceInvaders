@@ -2,7 +2,7 @@ import pygame
 import sys
 import random
 from player import Player
-from Barriers import Barrier1, Barrier2, Barrier3, Barrier4 #Georginas code
+from barriers import Barrier1, Barrier2, Barrier3, Barrier4 #Georginas code
 
 
 pygame.init()
